@@ -124,7 +124,7 @@ def check_case_status(receipt_number):
             # Status has changed, save the new status and send an email indicating the change
             save_status(case_status)
             send_email(
-                subject=f"USCIS Case Status Changed - {current_time}",
+                subject=f"USCIS Case Status Changed - New Status - {current_time}",
                 body=f"Your USCIS case status has changed. New Status: {case_status}",
                 to_email="qzhang.canada@gmail.com"
             )

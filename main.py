@@ -48,8 +48,8 @@ def save_status(status):
 def get_chromedriver_path():
     system_platform = platform.system().lower()
 
-    # get the current working directory
-    current_working_directory = os.getcwd()
+    # get the current directory which this file is in
+    current_working_directory = os.path.dirname(os.path.realpath(__file__))
 
     if system_platform == 'windows':
         chromedriver_path = current_working_directory + '/chromedriver-win64/chromedriver.exe'

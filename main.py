@@ -1,13 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-
 
 # Define a function to check USCIS case status
 def check_case_status(receipt_number):
@@ -33,9 +30,12 @@ def check_case_status(receipt_number):
         check_status_button = driver.find_element(By.NAME, "initCaseSearch")
         check_status_button.click()
 
-        # Wait for the status message to load
+        # Wait for 10 seconds after input
+        time.sleep(10)
+
+        # Now, wait for the status message to load (adjust the class name if needed)
         status_element = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "conditionalLanding"))  # Adjust this if needed
+            EC.presence_of_element_located((By.CLASS_NAME, "conditionalLanding"))
         )
 
         # Extract and return the status text

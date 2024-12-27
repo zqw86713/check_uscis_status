@@ -48,10 +48,15 @@ def save_status(status):
 def get_chromedriver_path():
     system_platform = platform.system().lower()
 
+    # get the current working directory
+    current_working_directory = os.getcwd()
+
     if system_platform == 'windows':
-        chromedriver_path = './chromedriver-win64/chromedriver.exe'
+        chromedriver_path = current_working_directory + '/chromedriver-win64/chromedriver.exe'
+
+
     elif system_platform == 'linux':
-        chromedriver_path = './chromedriver-linux64/chromedriver'  # Adjust this path if necessary
+        chromedriver_path = current_working_directory + '/chromedriver-linux64/chromedriver'  # Adjust this path if necessary
     else:
         raise Exception("Unsupported platform. Only Windows and Linux are supported.")
 

@@ -5,17 +5,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-import random
 
+# Define a function to check USCIS case status
 def check_case_status(receipt_number):
     chrome_options = Options()
-    chrome_options.add_argument('--headless')
+    # chrome_options.add_argument('--headless=new')  # Enable headless mode
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('start-maximized')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--remote-debugging-port=9222')
+    chrome_options.add_argument('start-maximized')  # Ensure the window is maximized in headless mode
+    chrome_options.add_argument('--remote-debugging-port=9222')  # Optional debugging option
 
+    # Set the correct path to the ChromeDriver
     service = Service('./chromedriver-win64/chromedriver.exe')
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -29,20 +29,17 @@ def check_case_status(receipt_number):
         receipt_input.clear()
         receipt_input.send_keys(receipt_number)
 
-        # Add a small random delay
-        time.sleep(random.uniform(1, 3))
-
         # Click the "Check Status" button
         check_status_button = driver.find_element(By.NAME, "initCaseSearch")
         check_status_button.click()
 
-        # Wait for the status message to load
+        # Wait for 10 seconds after input
+        time.sleep(10)
+
+        # Now, wait for the status message to load
         status_element = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.CLASS_NAME, "conditionalLanding"))
         )
-
-        # Add another small random delay
-        time.sleep(random.uniform(1, 2))
 
         # Extract and return the status text
         case_status = status_element.text.strip()
@@ -56,6 +53,7 @@ def check_case_status(receipt_number):
 
 # Example usage
 if __name__ == "__main__":
+    # Qingwei's receipt number.
     receipt_number = "IOE0923949113"
     status = check_case_status(receipt_number)
     if status:

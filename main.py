@@ -127,7 +127,7 @@ def check_case_status(receipt_number):
             # Status did not change, send an email including the previous status
             send_email(
                 subject=f"USCIS Case Status Did Not Change - {current_time}",
-                body=f"The USCIS case status has not changed. Previous Status: {previous_status}",
+                body=f"The USCIS case status has not changed.",
                 to_email="qzhang.canada@gmail.com"
             )
 

@@ -9,7 +9,7 @@ import time
 # Define a function to check USCIS case status
 def check_case_status(receipt_number):
     chrome_options = Options()
-    # chrome_options.add_argument('--headless')  # Enable for production
+    chrome_options.add_argument('--headless')  # Enable for production
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
 

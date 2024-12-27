@@ -101,6 +101,9 @@ def check_case_status(receipt_number):
         # Extract and return the status text
         case_status = status_element.text.strip()
 
+        # Split by newline and get the first part
+        status_headline = case_status.split("\n")[0]
+
         # Get the current date and time for the subject line, in Toronto timezone
         tz = pytz.timezone('America/Toronto')
         current_time = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
@@ -124,14 +127,14 @@ def check_case_status(receipt_number):
             # Status has changed, save the new status and send an email indicating the change
             save_status(case_status)
             send_email(
-                subject=f"USCIS Case Status Changed - New Status - {current_time}",
+                subject=f"USCIS Case Status Changed - {status_headline} - {current_time}",
                 body=f"Your USCIS case status has changed. New Status: {case_status}",
                 to_email="qzhang.canada@gmail.com"
             )
         else:
             # Status did not change, send an email including the previous status
             send_email(
-                subject=f"USCIS No Change: Case Is Being Actively Reviewed By USCIS - {current_time}",
+                subject=f"USCIS No Change- {status_headline} - {current_time}",
                 body=f"The USCIS case status has not changed.",
                 to_email="qzhang.canada@gmail.com"
             )

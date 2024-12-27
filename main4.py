@@ -51,7 +51,7 @@ def get_chromedriver_path():
     if system_platform == 'windows':
         chromedriver_path = './chromedriver-win64/chromedriver.exe'
     elif system_platform == 'linux':
-        chromedriver_path = './chromedriver-linux64/chromedriver'  # Adjust this path if necessary
+        chromedriver_path = './chrome-linux64/chromedriver'  # Adjust this path if necessary
     else:
         raise Exception("Unsupported platform. Only Windows and Linux are supported.")
 

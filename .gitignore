@@ -173,5 +173,3 @@ cython_debug/
 
 uscis_case_status.txt
 
-# virtualenv
-uscis/

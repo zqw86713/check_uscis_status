@@ -14,9 +14,6 @@ import pytz
 import platform
 
 
-
-
-
 def send_email(subject, body, recipient_emails):
     """
     Sends an email with the specified subject and body to multiple recipients.
@@ -25,8 +22,6 @@ def send_email(subject, body, recipient_emails):
     :param body: Email body
     :param recipient_emails: List of recipient email addresses
     """
-    # sender_email = "qzhang.usa0116@gmail.com"
-    # sender_password = "syyz olca bgjd iqnm"
 
     # Retrieve credentials from environment variables
     sender_email = os.getenv("SENDER_EMAIL")

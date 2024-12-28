@@ -27,6 +27,13 @@ def send_email(subject, body, recipient_emails):
     sender_email = os.getenv("SENDER_EMAIL")
     sender_password = os.getenv("SENDER_PASSWORD")
 
+    if not sender_email or not sender_password:
+        print("Environment variables are not set or are empty.")
+        print(f"SENDER_EMAIL: {sender_email}")
+        print(f"SENDER_PASSWORD: {sender_password}")
+    else:
+        print("Environment variables are set correctly.")
+
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
 

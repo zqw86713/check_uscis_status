@@ -162,8 +162,7 @@ def check_case_status(RECEIPT_NUMBER):
         # Send email to multiple recipients
         recipient_emails = [
             "qzhang.canada@gmail.com",
-            # "recipient2@example.com",
-            # "aurora.lkl12@gmail.com",  # Add more emails as needed
+            # "recipient2@example.com", # Add more emails as needed
         ]
 
         # Send the email

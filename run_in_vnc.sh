@@ -7,4 +7,4 @@ export DISPLAY=:1
 export XAUTHORITY=/root/.Xauthority
 
 # Run the Python script
-/root/check_uscis_status/uscis/bin/python /root/check_uscis_status/main.py >> /root/check_uscis_status/logfile.log 2>&1
+/root/my_uscis_env/bin/python /root/check_uscis_status/main.py >> /root/check_uscis_status/logfile.log 2>&1

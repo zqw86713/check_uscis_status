@@ -56,15 +56,6 @@ def send_email(subject, body, recipient_emails):
 
 
 # Function to save status to a local file
-# def save_status(status):
-#     # Save the status to a local file within the same directory
-#     with open(
-#         "uscis_case_status.txt", "w"
-#     ) as file:
-#         file.write(status)
-#     print("Status saved to uscis_case_status.txt")
-
-
 def save_status(status, file_path="uscis_case_status.txt"):
     """
     Saves the given status to a specified file.

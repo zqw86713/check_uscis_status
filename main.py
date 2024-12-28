@@ -189,11 +189,11 @@ def check_case_status(receipt_num):
             os.path.join(current_working_directory, "uscis_case_status.txt"),
         )
 
-        # Send email to multiple recipients
-        # recipient_emails = [
-        #     "qzhang.canada@gmail.com",
-        #     # "recipient2@example.com", # Add more emails as needed
-        # ]
+        # Send email to multiple recipients.
+        # You can store the emails as a comma-separated string.
+        # For example, you can set the RECIPIENT_EMAILS environment
+        # variable like this:
+        # export RECIPIENT_EMAILS="tom@example.com,recipient2@example.com"
         recipient_emails = os.getenv("RECIPIENT_EMAILS").split(",")
 
         # Send the email

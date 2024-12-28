@@ -79,6 +79,22 @@ def save_status(status, file_path="uscis_case_status.txt"):
         print(f"Failed to save status: {e}")
 
 
+def read_previous_status(file_path="uscis_case_status.txt"):
+    """
+    Reads the previous USCIS case status from a file if it exists.
+
+    :param file_path: The path to the file containing the previous status.
+    :return: The status as a string, or None if the file does not exist.
+    """
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r") as file:
+                return file.read().strip()
+        except IOError as e:
+            print(f"Failed to read status file: {e}")
+    return None
+
+
 # Function to detect platform and return the correct path to chromedriver
 def get_chromedriver_path():
     system_platform = platform.system().lower()
@@ -152,12 +168,9 @@ def check_case_status(RECEIPT_NUMBER):
         current_time = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
 
         # Read the previous status from the file if it exists
-        previous_status = None
-        if os.path.exists(current_working_directory + "uscis_case_status.txt"):
-            with open(
-                current_working_directory + "uscis_case_status.txt", "r"
-            ) as file:
-                previous_status = file.read().strip()
+        file_path = os.path.join(current_working_directory, "uscis_case_status.txt")
+        previous_status = read_previous_status(file_path)
+
 
         if previous_status is None:
             # First time check, save the status

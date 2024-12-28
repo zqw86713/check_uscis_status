@@ -16,37 +16,80 @@ import platform
 # Qingwei's receipt number.
 RECEIPT_NUMBER = "IOE0923949113"
 
-SENDER_EMAIL = "qzhang.usa0116@gmail.com"  # Your email address
-SENDER_PASSWORD = "syyz olca bgjd iqnm"  # Your email password (or app password if using Gmail)
-RECIPIENT_EMAIL = "qzhang.canada@gmail.com"
+# USCIS case status website
+USCIS_WEBSITE = "https://egov.uscis.gov/casestatus/landing.do"
 
+# Send email to multiple recipients
+recipient_emails = [
+    "qzhang.canada@gmail.com",
+    # "recipient2@example.com",
+    # "aurora.lkl12@gmail.com",  # Add more emails as needed
+]
 
 
 # Function to send an email notification
-def send_email(subject, body, to_email):
+# def send_email(subject, body, to_email=RECIPIENT_EMAIL):
+#
+#     msg = MIMEMultipart()
+#     msg["From"] = SENDER_EMAIL
+#     msg["To"] = to_email
+#     msg["Subject"] = subject
+#     msg.attach(MIMEText(body, "plain"))
+#
+#     try:
+#         server = smtplib.SMTP(
+#             "smtp.gmail.com", 587
+#         )  # Use your email provider's SMTP server
+#         server.starttls()
+#         server.login(SENDER_EMAIL, SENDER_PASSWORD)
+#         text = msg.as_string()
+#         server.sendmail(SENDER_EMAIL, to_email, text)
+#         server.quit()
+#         print(f"Email sent to {to_email}")
+#     except Exception as e:
+#         print(f"Failed to send email: {e}")
 
-    msg = MIMEMultipart()
-    msg['From'] = SENDER_EMAIL
-    msg['To'] = to_email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+
+def send_email(subject, body, recipient_emails):
+    """
+    Sends an email with the specified subject and body to multiple recipients.
+
+    :param subject: Email subject
+    :param body: Email body
+    :param recipient_emails: List of recipient email addresses
+    """
+    sender_email = "qzhang.usa0116@gmail.com"
+    sender_password = "syyz olca bgjd iqnm"
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
 
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)  # Use your email provider's SMTP server
+        msg = MIMEMultipart()
+        msg["From"] = sender_email
+        msg["To"] = ", ".join(
+            recipient_emails
+        )  # Join recipient emails with commas
+        msg["Subject"] = subject
+
+        msg.attach(MIMEText(body, "plain"))
+
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
-        text = msg.as_string()
-        server.sendmail(SENDER_EMAIL, to_email, text)
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, recipient_emails, msg.as_string())
         server.quit()
-        print(f"Email sent to {to_email}")
+        print("Email sent successfully!")
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        print(f"Failed to send email: {str(e)}")
+
 
 
 # Function to save status to a local file
 def save_status(status):
     # Save the status to a local file within the same directory
-    with open(current_working_directory + "uscis_case_status.txt", "w") as file:
+    with open(
+        current_working_directory + "uscis_case_status.txt", "w"
+    ) as file:
         file.write(status)
     print("Status saved to uscis_case_status.txt")
 
@@ -55,14 +98,19 @@ def save_status(status):
 def get_chromedriver_path():
     system_platform = platform.system().lower()
 
-    if system_platform == 'windows':
-        chromedriver_path = current_working_directory + '/chromedriver-win64/chromedriver.exe'
+    if system_platform == "windows":
+        chromedriver_path = (
+            current_working_directory + "/chromedriver-win64/chromedriver.exe"
+        )
 
-
-    elif system_platform == 'linux':
-        chromedriver_path = current_working_directory + '/chromedriver-linux64/chromedriver'  # Adjust this path if necessary
+    elif system_platform == "linux":
+        chromedriver_path = (
+            current_working_directory + "/chromedriver-linux64/chromedriver"
+        )  # Adjust this path if necessary
     else:
-        raise Exception("Unsupported platform. Only Windows and Linux are supported.")
+        raise Exception(
+            "Unsupported platform. Only Windows and Linux are supported."
+        )
 
     return chromedriver_path
 
@@ -70,10 +118,14 @@ def get_chromedriver_path():
 # Function to check USCIS case status
 def check_case_status(RECEIPT_NUMBER):
     chrome_options = Options()
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('start-maximized')  # Ensure the window is maximized in headless mode
-    chrome_options.add_argument('--remote-debugging-port=9222')  # Optional debugging option
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument(
+        "start-maximized"
+    )  # Ensure the window is maximized in headless mode
+    chrome_options.add_argument(
+        "--remote-debugging-port=9222"
+    )  # Optional debugging option
 
     # Get the appropriate chromedriver path based on the operating system
     chromedriver_path = get_chromedriver_path()
@@ -81,7 +133,7 @@ def check_case_status(RECEIPT_NUMBER):
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
     try:
-        driver.get("https://egov.uscis.gov/casestatus/landing.do")
+        driver.get(USCIS_WEBSITE)
 
         # Wait for the input field to be available
         receipt_input = WebDriverWait(driver, 30).until(
@@ -99,7 +151,9 @@ def check_case_status(RECEIPT_NUMBER):
 
         # Now, wait for the status message to load
         status_element = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "conditionalLanding"))
+            EC.presence_of_element_located(
+                (By.CLASS_NAME, "conditionalLanding")
+            )
         )
 
         # Extract and return the status text
@@ -109,39 +163,34 @@ def check_case_status(RECEIPT_NUMBER):
         status_headline = case_status.split("\n")[0]
 
         # Get the current date and time for the subject line, in Toronto timezone
-        tz = pytz.timezone('America/Toronto')
+        tz = pytz.timezone("America/Toronto")
         current_time = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
 
         # Read the previous status from the file if it exists
         previous_status = None
         if os.path.exists(current_working_directory + "uscis_case_status.txt"):
-            with open(current_working_directory + "uscis_case_status.txt", "r") as file:
+            with open(
+                current_working_directory + "uscis_case_status.txt", "r"
+            ) as file:
                 previous_status = file.read().strip()
 
-        # Compare current status with the previous one and send email accordingly
         if previous_status is None:
-            # First time check, save the status and send an initial email
+            # First time check, save the status
             save_status(case_status)
-            send_email(
-                subject=f"USCIS Case Status Initial Check - {current_time}",
-                body=f"Your USCIS case status: {case_status}",
-                to_email=RECIPIENT_EMAIL
-            )
+            subject = f"USCIS Case Status Initial Check - {current_time}"
+            body = f"Your USCIS case status: {case_status}"
         elif previous_status != case_status:
-            # Status has changed, save the new status and send an email indicating the change
+            # Status has changed, save the new status
             save_status(case_status)
-            send_email(
-                subject=f"USCIS Case Status Changed - {status_headline} - {current_time}",
-                body=f"Your USCIS case status has changed. New Status: {case_status}",
-                to_email=RECIPIENT_EMAIL
-            )
+            subject = f"USCIS Case Status Changed - {status_headline} - {current_time}"
+            body = f"Your USCIS case status has changed. New Status: {case_status}"
         else:
-            # Status did not change, send an email including the previous status
-            send_email(
-                subject=f"USCIS No Change- {status_headline} - {current_time}",
-                body=f"The USCIS case status has not changed.",
-                to_email=RECIPIENT_EMAIL
-            )
+            # Status did not change
+            subject = f"USCIS No Change - {status_headline} - {current_time}"
+            body = f"The USCIS case status has not changed."
+
+        # Send the email
+        send_email(subject=subject, body=body, recipient_emails=recipient_emails)
 
         return case_status
 
@@ -154,8 +203,6 @@ def check_case_status(RECEIPT_NUMBER):
 
 # Example usage
 if __name__ == "__main__":
-
-
     # get the current directory which this file is in
     current_working_directory = os.path.dirname(os.path.realpath(__file__))
 

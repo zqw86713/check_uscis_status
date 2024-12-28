@@ -190,10 +190,11 @@ def check_case_status(receipt_num):
         )
 
         # Send email to multiple recipients
-        recipient_emails = [
-            "qzhang.canada@gmail.com",
-            # "recipient2@example.com", # Add more emails as needed
-        ]
+        # recipient_emails = [
+        #     "qzhang.canada@gmail.com",
+        #     # "recipient2@example.com", # Add more emails as needed
+        # ]
+        recipient_emails = os.getenv("RECIPIENT_EMAILS").split(",")
 
         # Send the email
         send_email(

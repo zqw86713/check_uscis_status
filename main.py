@@ -14,7 +14,7 @@ import pytz
 import platform
 
 # Qingwei's receipt number.
-receipt_number = "IOE0923949113"
+RECEIPT_NUMBER = "IOE0923949113"
 
 SENDER_EMAIL = "qzhang.usa0116@gmail.com"  # Your email address
 SENDER_PASSWORD = "syyz olca bgjd iqnm"  # Your email password (or app password if using Gmail)
@@ -68,7 +68,7 @@ def get_chromedriver_path():
 
 
 # Function to check USCIS case status
-def check_case_status(receipt_number):
+def check_case_status(RECEIPT_NUMBER):
     chrome_options = Options()
     chrome_options.add_argument('--disable-gpu')
     chrome_options.add_argument('--no-sandbox')
@@ -88,7 +88,7 @@ def check_case_status(receipt_number):
             EC.presence_of_element_located((By.ID, "receipt_number"))
         )
         receipt_input.clear()
-        receipt_input.send_keys(receipt_number)
+        receipt_input.send_keys(RECEIPT_NUMBER)
 
         # Click the "Check Status" button
         check_status_button = driver.find_element(By.NAME, "initCaseSearch")
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     # get the current directory which this file is in
     current_working_directory = os.path.dirname(os.path.realpath(__file__))
 
-    status = check_case_status(receipt_number)
+    status = check_case_status(RECEIPT_NUMBER)
     if status:
         print("Case Status:")
         print(status)

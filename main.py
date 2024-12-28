@@ -19,36 +19,6 @@ RECEIPT_NUMBER = "IOE0923949113"
 # USCIS case status website
 USCIS_WEBSITE = "https://egov.uscis.gov/casestatus/landing.do"
 
-# Send email to multiple recipients
-recipient_emails = [
-    "qzhang.canada@gmail.com",
-    # "recipient2@example.com",
-    # "aurora.lkl12@gmail.com",  # Add more emails as needed
-]
-
-
-# Function to send an email notification
-# def send_email(subject, body, to_email=RECIPIENT_EMAIL):
-#
-#     msg = MIMEMultipart()
-#     msg["From"] = SENDER_EMAIL
-#     msg["To"] = to_email
-#     msg["Subject"] = subject
-#     msg.attach(MIMEText(body, "plain"))
-#
-#     try:
-#         server = smtplib.SMTP(
-#             "smtp.gmail.com", 587
-#         )  # Use your email provider's SMTP server
-#         server.starttls()
-#         server.login(SENDER_EMAIL, SENDER_PASSWORD)
-#         text = msg.as_string()
-#         server.sendmail(SENDER_EMAIL, to_email, text)
-#         server.quit()
-#         print(f"Email sent to {to_email}")
-#     except Exception as e:
-#         print(f"Failed to send email: {e}")
-
 
 def send_email(subject, body, recipient_emails):
     """
@@ -188,6 +158,13 @@ def check_case_status(RECEIPT_NUMBER):
             # Status did not change
             subject = f"USCIS No Change - {status_headline} - {current_time}"
             body = f"The USCIS case status has not changed."
+
+        # Send email to multiple recipients
+        recipient_emails = [
+            "qzhang.canada@gmail.com",
+            # "recipient2@example.com",
+            # "aurora.lkl12@gmail.com",  # Add more emails as needed
+        ]
 
         # Send the email
         send_email(subject=subject, body=body, recipient_emails=recipient_emails)

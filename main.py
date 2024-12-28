@@ -53,7 +53,6 @@ def send_email(subject, body, recipient_emails):
         print(f"Failed to send email: {str(e)}")
 
 
-
 # Function to save status to a local file
 # def save_status(status):
 #     # Save the status to a local file within the same directory
@@ -168,9 +167,10 @@ def check_case_status(RECEIPT_NUMBER):
         current_time = datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
 
         # Read the previous status from the file if it exists
-        file_path = os.path.join(current_working_directory, "uscis_case_status.txt")
+        file_path = os.path.join(
+            current_working_directory, "uscis_case_status.txt"
+        )
         previous_status = read_previous_status(file_path)
-
 
         if previous_status is None:
             # First time check, save the status
@@ -186,7 +186,10 @@ def check_case_status(RECEIPT_NUMBER):
             body = f"The USCIS case status has not changed."
 
         # Save the status to a file.
-        save_status(status, os.path.join(current_working_directory, "uscis_case_status.txt"))
+        save_status(
+            status,
+            os.path.join(current_working_directory, "uscis_case_status.txt"),
+        )
 
         # Send email to multiple recipients
         recipient_emails = [
@@ -195,7 +198,9 @@ def check_case_status(RECEIPT_NUMBER):
         ]
 
         # Send the email
-        send_email(subject=subject, body=body, recipient_emails=recipient_emails)
+        send_email(
+            subject=subject, body=body, recipient_emails=recipient_emails
+        )
 
         return case_status
 

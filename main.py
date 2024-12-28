@@ -55,13 +55,28 @@ def send_email(subject, body, recipient_emails):
 
 
 # Function to save status to a local file
-def save_status(status):
-    # Save the status to a local file within the same directory
-    with open(
-        current_working_directory + "uscis_case_status.txt", "w"
-    ) as file:
-        file.write(status)
-    print("Status saved to uscis_case_status.txt")
+# def save_status(status):
+#     # Save the status to a local file within the same directory
+#     with open(
+#         "uscis_case_status.txt", "w"
+#     ) as file:
+#         file.write(status)
+#     print("Status saved to uscis_case_status.txt")
+
+
+def save_status(status, file_path="uscis_case_status.txt"):
+    """
+    Saves the given status to a specified file.
+
+    :param status: The USCIS case status to save.
+    :param file_path: The path to the file where the status will be saved.
+    """
+    try:
+        with open(file_path, "w") as file:
+            file.write(status)
+        print(f"Status successfully saved to {file_path}")
+    except IOError as e:
+        print(f"Failed to save status: {e}")
 
 
 # Function to detect platform and return the correct path to chromedriver
@@ -146,18 +161,19 @@ def check_case_status(RECEIPT_NUMBER):
 
         if previous_status is None:
             # First time check, save the status
-            save_status(case_status)
             subject = f"USCIS Case Status Initial Check - {current_time}"
             body = f"Your USCIS case status: {case_status}"
         elif previous_status != case_status:
             # Status has changed, save the new status
-            save_status(case_status)
             subject = f"USCIS Case Status Changed - {status_headline} - {current_time}"
             body = f"Your USCIS case status has changed. New Status: {case_status}"
         else:
             # Status did not change
             subject = f"USCIS No Change - {status_headline} - {current_time}"
             body = f"The USCIS case status has not changed."
+
+        # Save the status to a file.
+        save_status(status, os.path.join(current_working_directory, "uscis_case_status.txt"))
 
         # Send email to multiple recipients
         recipient_emails = [

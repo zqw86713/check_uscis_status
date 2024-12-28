@@ -221,8 +221,8 @@ if __name__ == "__main__":
     # get the current directory which this file is in
     current_working_directory = os.path.dirname(os.path.realpath(__file__))
 
-    MY_RECEIPT_NUMBER = os.getenv("RECEIPT_NUMBER")
-    status = check_case_status(MY_RECEIPT_NUMBER)
+    my_receipt_number = os.getenv("RECEIPT_NUMBER")
+    status = check_case_status(my_receipt_number)
     if status:
         print("Case Status:")
         print(status)

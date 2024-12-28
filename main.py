@@ -13,11 +13,8 @@ from datetime import datetime
 import pytz
 import platform
 
-# Qingwei's receipt number.
-RECEIPT_NUMBER = "IOE0923949113"
 
-# USCIS case status website
-USCIS_WEBSITE = "https://egov.uscis.gov/casestatus/landing.do"
+
 
 
 def send_email(subject, body, recipient_emails):
@@ -28,8 +25,13 @@ def send_email(subject, body, recipient_emails):
     :param body: Email body
     :param recipient_emails: List of recipient email addresses
     """
-    sender_email = "qzhang.usa0116@gmail.com"
-    sender_password = "syyz olca bgjd iqnm"
+    # sender_email = "qzhang.usa0116@gmail.com"
+    # sender_password = "syyz olca bgjd iqnm"
+
+    # Retrieve credentials from environment variables
+    sender_email = os.getenv("SENDER_EMAIL")
+    sender_password = os.getenv("SENDER_PASSWORD")
+
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
 
@@ -116,7 +118,7 @@ def get_chromedriver_path():
 
 
 # Function to check USCIS case status
-def check_case_status(RECEIPT_NUMBER):
+def check_case_status(receipt_num):
     chrome_options = Options()
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--no-sandbox")
@@ -132,6 +134,9 @@ def check_case_status(RECEIPT_NUMBER):
     service = Service(chromedriver_path)
     driver = webdriver.Chrome(service=service, options=chrome_options)
 
+    # USCIS case status website
+    USCIS_WEBSITE = "https://egov.uscis.gov/casestatus/landing.do"
+
     try:
         driver.get(USCIS_WEBSITE)
 
@@ -140,7 +145,7 @@ def check_case_status(RECEIPT_NUMBER):
             EC.presence_of_element_located((By.ID, "receipt_number"))
         )
         receipt_input.clear()
-        receipt_input.send_keys(RECEIPT_NUMBER)
+        receipt_input.send_keys(receipt_num)
 
         # Click the "Check Status" button
         check_status_button = driver.find_element(By.NAME, "initCaseSearch")
@@ -216,7 +221,8 @@ if __name__ == "__main__":
     # get the current directory which this file is in
     current_working_directory = os.path.dirname(os.path.realpath(__file__))
 
-    status = check_case_status(RECEIPT_NUMBER)
+    MY_RECEIPT_NUMBER = os.getenv("RECEIPT_NUMBER")
+    status = check_case_status(MY_RECEIPT_NUMBER)
     if status:
         print("Case Status:")
         print(status)

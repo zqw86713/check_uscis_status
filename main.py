@@ -13,13 +13,24 @@ from datetime import datetime
 import pytz
 import platform
 
+# There are 4 environment variables that need to be set:
+# 1. RECEIPT_NUMBER: Your USCIS receipt number
+# 2. SENDER_EMAIL: The email address from which you want to send the email
+# 3. SENDER_PASSWORD: The password for the sender email address
+# 4. RECIPIENT_EMAILS: A comma-separated list of recipient email addresses
+
+
+# 1. Retrieve the USCIS receipt number from environment variables
 my_receipt_number = os.getenv("RECEIPT_NUMBER")
 
-# Retrieve credentials from environment variables
+# 2. Retrieve credentials from environment variables
 sender_email = os.getenv("SENDER_EMAIL")
+
+# 3. Retrieve the sender's email password from environment variables
 sender_password = os.getenv("SENDER_PASSWORD")
 
-# Send email to multiple recipients.
+# 4. Retrieve the recipient email addresses from environment variables
+# The recipient emails can be a single email address or multiple email addresses.
 # You can store the emails as a comma-separated string.
 # For example, you can set the RECIPIENT_EMAILS environment
 # variable like this:

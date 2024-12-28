@@ -13,6 +13,19 @@ from datetime import datetime
 import pytz
 import platform
 
+my_receipt_number = os.getenv("RECEIPT_NUMBER")
+
+# Retrieve credentials from environment variables
+sender_email = os.getenv("SENDER_EMAIL")
+sender_password = os.getenv("SENDER_PASSWORD")
+
+# Send email to multiple recipients.
+# You can store the emails as a comma-separated string.
+# For example, you can set the RECIPIENT_EMAILS environment
+# variable like this:
+# export RECIPIENT_EMAILS="tom@example.com,recipient2@example.com"
+recipient_emails = os.getenv("RECIPIENT_EMAILS").split(",")
+
 
 def send_email(subject, body, recipient_emails):
     """
@@ -22,10 +35,6 @@ def send_email(subject, body, recipient_emails):
     :param body: Email body
     :param recipient_emails: List of recipient email addresses
     """
-
-    # Retrieve credentials from environment variables
-    sender_email = os.getenv("SENDER_EMAIL")
-    sender_password = os.getenv("SENDER_PASSWORD")
 
     if not sender_email or not sender_password:
         print("Environment variables are not set or are empty.")
@@ -189,13 +198,6 @@ def check_case_status(receipt_num):
             os.path.join(current_working_directory, "uscis_case_status.txt"),
         )
 
-        # Send email to multiple recipients.
-        # You can store the emails as a comma-separated string.
-        # For example, you can set the RECIPIENT_EMAILS environment
-        # variable like this:
-        # export RECIPIENT_EMAILS="tom@example.com,recipient2@example.com"
-        recipient_emails = os.getenv("RECIPIENT_EMAILS").split(",")
-
         # Send the email
         send_email(
             subject=subject, body=body, recipient_emails=recipient_emails
@@ -215,7 +217,6 @@ if __name__ == "__main__":
     # get the current directory which this file is in
     current_working_directory = os.path.dirname(os.path.realpath(__file__))
 
-    my_receipt_number = os.getenv("RECEIPT_NUMBER")
     status = check_case_status(my_receipt_number)
     if status:
         print("Case Status:")

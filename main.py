@@ -187,7 +187,7 @@ def check_case_status(RECEIPT_NUMBER):
 
         # Save the status to a file.
         save_status(
-            status,
+            case_status,
             os.path.join(current_working_directory, "uscis_case_status.txt"),
         )
 

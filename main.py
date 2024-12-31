@@ -246,5 +246,6 @@ if __name__ == "__main__":
     if status:
         print("Case Status:")
         print(status)
+        print("\n\n")
     else:
         print("Failed to retrieve the case status. Please try again.")

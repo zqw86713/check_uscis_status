@@ -226,7 +226,8 @@ def check_case_status(receipt_num):
             # Status did not change
             # subject = f"USCIS No Change - {status_headline} - {current_time}"
             # body = f"The USCIS case status has not changed."
-            print(f"{current_time}, The USCIS case status has not changed.\n\n")
+            print(f"{current_time}, The USCIS case status has not changed.")
+            print(f"{status_headline}\n\n")
 
         return case_status
 

@@ -194,25 +194,39 @@ def check_case_status(receipt_num):
             # First time check, save the status
             subject = f"USCIS Case Status Initial Check - {current_time}"
             body = f"Your USCIS case status: {case_status}"
+
+            # Save the status to a file.
+            save_status(
+                case_status,
+                os.path.join(
+                    current_working_directory, "uscis_case_status.txt"
+                ),
+            )
+            # Send the email
+            send_email(
+                subject=subject, body=body, recipient_emails=recipient_emails
+            )
         elif previous_status != case_status:
             # Status has changed, save the new status
             subject = f"USCIS Case Status Changed - {status_headline} - {current_time}"
             body = f"Your USCIS case status has changed. New Status: {case_status}"
+
+            # Save the status to a file.
+            save_status(
+                case_status,
+                os.path.join(
+                    current_working_directory, "uscis_case_status.txt"
+                ),
+            )
+            # Send the email
+            send_email(
+                subject=subject, body=body, recipient_emails=recipient_emails
+            )
         else:
             # Status did not change
-            subject = f"USCIS No Change - {status_headline} - {current_time}"
-            body = f"The USCIS case status has not changed."
-
-        # Save the status to a file.
-        save_status(
-            case_status,
-            os.path.join(current_working_directory, "uscis_case_status.txt"),
-        )
-
-        # Send the email
-        send_email(
-            subject=subject, body=body, recipient_emails=recipient_emails
-        )
+            # subject = f"USCIS No Change - {status_headline} - {current_time}"
+            # body = f"The USCIS case status has not changed."
+            print("The USCIS case status has not changed.")
 
         return case_status
 

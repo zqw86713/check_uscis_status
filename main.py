@@ -35,7 +35,14 @@ sender_password = os.getenv("SENDER_PASSWORD")
 # For example, you can set the RECIPIENT_EMAILS environment
 # variable like this:
 # export RECIPIENT_EMAILS="tom@example.com,recipient2@example.com"
-recipient_emails = os.getenv("RECIPIENT_EMAILS").split(",")
+recipient_emails_env = os.getenv("RECIPIENT_EMAILS", "")
+
+
+# Handle recipient emails
+if "," in recipient_emails_env:
+    recipient_emails = [email.strip() for email in recipient_emails_env.split(",")]
+else:
+    recipient_emails = [recipient_emails_env.strip()] if recipient_emails_env.strip() else []
 
 
 def send_email(subject, body, recipient_emails):
@@ -227,6 +234,10 @@ def check_case_status(receipt_num):
             # subject = f"USCIS No Change - {status_headline} - {current_time}"
             # body = f"The USCIS case status has not changed."
             print(f"{current_time}, The USCIS case status has not changed.")
+            # Send the email
+            # send_email(
+            #     subject=subject, body=body, recipient_emails=recipient_emails
+            # )
 
         return case_status
 
